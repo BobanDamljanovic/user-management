@@ -10,6 +10,7 @@ use yii\helpers\Html;
 $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['/user-management/auth/confirm-email-receive', 'token' => $user->confirmation_token]);
 ?>
 
+
 Hello <?= Html::encode($user->username) ?>, follow this link to confirm your email:
 
 <?= Html::a('Confirm E-mail', $resetLink) ?>
