@@ -1,19 +1,20 @@
 <?php
 /**
  * @var yii\widgets\ActiveForm $form
- * @var webvimark\modules\UserManagement\models\rbacDB\Role $model
+ * @var nitrocinema\modules\UserManagement\models\rbacDB\Role $model
  */
-use webvimark\modules\UserManagement\models\rbacDB\AuthItemGroup;
-use webvimark\modules\UserManagement\UserManagementModule;
+use nitrocinema\modules\UserManagement\models\rbacDB\AuthItemGroup;
+use nitrocinema\modules\UserManagement\UserManagementModule;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+
 ?>
 
 <?php $form = ActiveForm::begin([
-	'id'             => 'role-form',
-	'layout'         => 'horizontal',
-	'validateOnBlur' => false,
+    'id'             => 'role-form',
+    'layout'         => 'horizontal',
+    'validateOnBlur' => false,
 ]) ?>
 
 	<?= $form->field($model, 'description')->textInput(['maxlength' => 255, 'autofocus'=>$model->isNewRecord ? true:false]) ?>
@@ -23,16 +24,16 @@ use yii\helpers\Html;
 
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-9">
-			<?php if ( $model->isNewRecord ): ?>
+			<?php if ($model->isNewRecord): ?>
 				<?= Html::submitButton(
-					'<span class="glyphicon glyphicon-plus-sign"></span> ' . UserManagementModule::t('back', 'Create'),
-					['class' => 'btn btn-success']
-				) ?>
+                    '<span class="glyphicon glyphicon-plus-sign"></span> ' . UserManagementModule::t('back', 'Create'),
+                    ['class' => 'btn btn-success']
+                ) ?>
 			<?php else: ?>
 				<?= Html::submitButton(
-					'<span class="glyphicon glyphicon-ok"></span> ' . UserManagementModule::t('back', 'Save'),
-					['class' => 'btn btn-primary']
-				) ?>
+                    '<span class="glyphicon glyphicon-ok"></span> ' . UserManagementModule::t('back', 'Save'),
+                    ['class' => 'btn btn-primary']
+                ) ?>
 			<?php endif; ?>
 		</div>
 	</div>

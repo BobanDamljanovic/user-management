@@ -1,7 +1,7 @@
 <?php
-namespace webvimark\modules\UserManagement\models\rbacDB\search;
+namespace nitrocinema\modules\UserManagement\models\rbacDB\search;
 
 class RoleSearch extends AbstractItemSearch
 {
-	const ITEM_TYPE = self::TYPE_ROLE;
+    const ITEM_TYPE = self::TYPE_ROLE;
 }

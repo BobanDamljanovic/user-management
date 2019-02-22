@@ -9,8 +9,8 @@
  * @var yii\rbac\Permission $item
  */
 
-use webvimark\modules\UserManagement\components\GhostHtml;
-use webvimark\modules\UserManagement\UserManagementModule;
+use nitrocinema\modules\UserManagement\components\GhostHtml;
+use nitrocinema\modules\UserManagement\UserManagementModule;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <h2 class="lte-hide-title"><?= $this->title ?></h2>
 
 
-<?php if ( Yii::$app->session->hasFlash('success') ): ?>
+<?php if (Yii::$app->session->hasFlash('success')): ?>
 	<div class="alert alert-success text-center">
 		<?= Yii::$app->session->getFlash('success') ?>
 	</div>
@@ -59,10 +59,10 @@ $this->params['breadcrumbs'][] = $this->title;
 									</label>
 
 									<?= GhostHtml::a(
-										'<span class="glyphicon glyphicon-edit"></span>',
-										['view', 'id'=>$permission->name],
-										['target'=>'_blank']
-									) ?>
+                                        '<span class="glyphicon glyphicon-edit"></span>',
+                                        ['view', 'id'=>$permission->name],
+                                        ['target'=>'_blank']
+                                    ) ?>
 									<br/>
 								<?php endforeach ?>
 
@@ -77,9 +77,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 				<hr/>
 				<?= Html::submitButton(
-					'<span class="glyphicon glyphicon-ok"></span> ' . UserManagementModule::t('back', 'Save'),
-					['class'=>'btn btn-primary btn-sm']
-				) ?>
+                    '<span class="glyphicon glyphicon-ok"></span> ' . UserManagementModule::t('back', 'Save'),
+                    ['class'=>'btn btn-primary btn-sm']
+                ) ?>
 
 				<?= Html::endForm() ?>
 			</div>
@@ -93,23 +93,23 @@ $this->params['breadcrumbs'][] = $this->title;
 					<span class="glyphicon glyphicon-th"></span> Routes
 
 					<?= Html::a(
-						UserManagementModule::t('back', 'Refresh routes (and delete unused)'),
-						['refresh-routes', 'id'=>$item->name, 'deleteUnused'=>1],
-						[
-							'class' => 'btn btn-default btn-sm pull-right',
-							'style'=>'margin-top:-5px; text-transform:none;',
-							'data-confirm'=>UserManagementModule::t('back', 'Routes that are not exists in this application will be deleted. Do not recommended for application with "advanced" structure, because frontend and backend have they own set of routes.'),
-						]
-					) ?>
+                        UserManagementModule::t('back', 'Refresh routes (and delete unused)'),
+                        ['refresh-routes', 'id'=>$item->name, 'deleteUnused'=>1],
+                        [
+                            'class' => 'btn btn-default btn-sm pull-right',
+                            'style'=>'margin-top:-5px; text-transform:none;',
+                            'data-confirm'=>UserManagementModule::t('back', 'Routes that are not exists in this application will be deleted. Do not recommended for application with "advanced" structure, because frontend and backend have they own set of routes.'),
+                        ]
+                    ) ?>
 
 					<?= Html::a(
-						UserManagementModule::t('back', 'Refresh routes'),
-						['refresh-routes', 'id'=>$item->name],
-						[
-							'class' => 'btn btn-default btn-sm pull-right',
-							'style'=>'margin-top:-5px; text-transform:none;',
-						]
-					) ?>
+                        UserManagementModule::t('back', 'Refresh routes'),
+                        ['refresh-routes', 'id'=>$item->name],
+                        [
+                            'class' => 'btn btn-default btn-sm pull-right',
+                            'style'=>'margin-top:-5px; text-transform:none;',
+                        ]
+                    ) ?>
 
 
 				</strong>
@@ -122,9 +122,9 @@ $this->params['breadcrumbs'][] = $this->title;
 				<div class="row">
 					<div class="col-sm-3">
 						<?= Html::submitButton(
-							'<span class="glyphicon glyphicon-ok"></span> ' . UserManagementModule::t('back', 'Save'),
-							['class'=>'btn btn-primary btn-sm']
-						) ?>
+                            '<span class="glyphicon glyphicon-ok"></span> ' . UserManagementModule::t('back', 'Save'),
+                            ['class'=>'btn btn-primary btn-sm']
+                        ) ?>
 					</div>
 
 					<div class="col-sm-6">
@@ -145,28 +145,28 @@ $this->params['breadcrumbs'][] = $this->title;
 				<hr/>
 
 				<?= Html::checkboxList(
-					'child_routes',
-					ArrayHelper::map($childRoutes, 'name', 'name'),
-					ArrayHelper::map($routes, 'name', 'name'),
-					[
-						'id'=>'routes-list',
-						'separator'=>'<div class="separator"></div>',
-						'item'=>function($index, $label, $name, $checked, $value) {
-								return Html::checkbox($name, $checked, [
-									'value' => $value,
-									'label' => '<span class="route-text">' . $label . '</span>',
-									'labelOptions'=>['class'=>'route-label'],
-									'class'=>'route-checkbox',
-								]);
-						},
-					]
-				) ?>
+                    'child_routes',
+                    ArrayHelper::map($childRoutes, 'name', 'name'),
+                    ArrayHelper::map($routes, 'name', 'name'),
+                    [
+                        'id'=>'routes-list',
+                        'separator'=>'<div class="separator"></div>',
+                        'item'=>function ($index, $label, $name, $checked, $value) {
+                            return Html::checkbox($name, $checked, [
+                                    'value' => $value,
+                                    'label' => '<span class="route-text">' . $label . '</span>',
+                                    'labelOptions'=>['class'=>'route-label'],
+                                    'class'=>'route-checkbox',
+                                ]);
+                        },
+                    ]
+                ) ?>
 
 				<hr/>
 				<?= Html::submitButton(
-					'<span class="glyphicon glyphicon-ok"></span> ' . UserManagementModule::t('back', 'Save'),
-					['class'=>'btn btn-primary btn-sm']
-				) ?>
+                    '<span class="glyphicon glyphicon-ok"></span> ' . UserManagementModule::t('back', 'Save'),
+                    ['class'=>'btn btn-primary btn-sm']
+                ) ?>
 
 				<?= Html::endForm() ?>
 

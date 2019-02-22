@@ -20,13 +20,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-composer require webvimark/module-user-management
+composer require nitrocinema/module-user-management
 ```
 
 or add
 
 ```
-"webvimark/module-user-management": "^1"
+"nitrocinema/module-user-management": "^1"
 ```
 
 to the require section of your `composer.json` file.
@@ -40,18 +40,18 @@ Configuration
 
 'components'=>[
 	'user' => [
-		'class' => 'webvimark\modules\UserManagement\components\UserConfig',
+		'class' => 'nitrocinema\modules\UserManagement\components\UserConfig',
 
 		// Comment this if you don't want to record user logins
 		'on afterLogin' => function($event) {
-				\webvimark\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
+				\nitrocinema\modules\UserManagement\models\UserVisitLog::newVisitor($event->identity->id);
 			}
 	],
 ],
 
 'modules'=>[
 	'user-management' => [
-		'class' => 'webvimark\modules\UserManagement\UserManagementModule',
+		'class' => 'nitrocinema\modules\UserManagement\UserManagementModule',
 
 		// 'enableRegistration' => true,
 
@@ -65,7 +65,7 @@ Configuration
 		// $: anchored to the end of the string
 
 		//'passwordRegexp' => '^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$',
-		
+
 
 		// Here you can set your handler to change layout for any controller or action
 		// Tip: you can use this event in any module
@@ -96,8 +96,8 @@ To see full list of options check *UserManagementModule* file
 
 'modules'=>[
 	'user-management' => [
-		'class' => 'webvimark\modules\UserManagement\UserManagementModule',
-	        'controllerNamespace'=>'vendor\webvimark\modules\UserManagement\controllers', // To prevent yii help from crashing
+		'class' => 'nitrocinema\modules\UserManagement\UserManagementModule',
+	        'controllerNamespace'=>'vendor\nitrocinema\modules\UserManagement\controllers', // To prevent yii help from crashing
 	],
 ],
 
@@ -107,7 +107,7 @@ To see full list of options check *UserManagementModule* file
 
 ```php
 
-./yii migrate --migrationPath=vendor/webvimark/module-user-management/migrations/
+./yii migrate --migrationPath=vendor/nitrocinema/module-user-management/migrations/
 
 ```
 
@@ -119,7 +119,7 @@ public function behaviors()
 {
 	return [
 		'ghost-access'=> [
-			'class' => 'webvimark\modules\UserManagement\components\GhostAccessControl',
+			'class' => 'nitrocinema\modules\UserManagement\components\GhostAccessControl',
 		],
 	];
 }
@@ -132,8 +132,8 @@ Where you can go
 ```php
 
 <?php
-use webvimark\modules\UserManagement\components\GhostMenu;
-use webvimark\modules\UserManagement\UserManagementModule;
+use nitrocinema\modules\UserManagement\components\GhostMenu;
+use nitrocinema\modules\UserManagement\UserManagementModule;
 
 echo GhostMenu::widget([
 	'encodeLabels'=>false,
@@ -231,7 +231,7 @@ Events can be handled via config file like following
 
 'modules'=>[
 	'user-management' => [
-		'class' => 'webvimark\modules\UserManagement\UserManagementModule',
+		'class' => 'nitrocinema\modules\UserManagement\UserManagementModule',
 		'on afterRegistration' => function(UserAuthEvent $event) {
 			// Here you can do your own stuff like assign roles, send emails and so on
 		},
@@ -244,10 +244,6 @@ List of supported events can be found in *UserAuthEvent* class
 
 FAQ
 ---
-
-**Question**: Do you have API docs?
-
-**Answer**: Check this one http://opensource.id5.com.br/webvimark/doc/index.html (Credits to [lukBarros](https://github.com/lukBarros))
 
 **Question**: I want users to register and login with they e-mails! Mmmmm... And they should confirm it too!
 

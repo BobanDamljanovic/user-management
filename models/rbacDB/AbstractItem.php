@@ -1,9 +1,9 @@
 <?php
-namespace webvimark\modules\UserManagement\models\rbacDB;
+namespace nitrocinema\modules\UserManagement\models\rbacDB;
 
-use webvimark\modules\UserManagement\components\AuthHelper;
-use webvimark\modules\UserManagement\components\AbstractItemEvent;
-use webvimark\modules\UserManagement\UserManagementModule;
+use nitrocinema\modules\UserManagement\components\AuthHelper;
+use nitrocinema\modules\UserManagement\components\AbstractItemEvent;
+use nitrocinema\modules\UserManagement\UserManagementModule;
 use Yii;
 use yii\base\Event;
 use yii\base\ModelEvent;
@@ -12,7 +12,6 @@ use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\Inflector;
 use yii\rbac\DbManager;
-
 
 /**
  * @property integer $type
@@ -28,246 +27,237 @@ use yii\rbac\DbManager;
  */
 abstract class AbstractItem extends ActiveRecord
 {
-	const EVENT_BEFORE_ADD_CHILDREN = 'beforeAddChildren';
-	const EVENT_BEFORE_REMOVE_CHILDREN = 'beforeRemoveChildren';
+    const EVENT_BEFORE_ADD_CHILDREN = 'beforeAddChildren';
+    const EVENT_BEFORE_REMOVE_CHILDREN = 'beforeRemoveChildren';
 
-	const TYPE_ROLE = 1;
-	const TYPE_PERMISSION = 2;
-	const TYPE_ROUTE = 3;
+    const TYPE_ROLE = 1;
+    const TYPE_PERMISSION = 2;
+    const TYPE_ROUTE = 3;
 
-	/**
-	 * Reassigned in child classes to type role, permission or route
-	 */
-	const ITEM_TYPE = 0;
-
-
-	/**
-	 * Useful helper for migrations and other stuff
-	 * If description is null than it will be transformed like "editUserEmail" => "Edit user email"
-	 *
-	 * @param string      $name
-	 * @param null|string $description
-	 * @param null|string $groupCode
-	 * @param null|string $ruleName
-	 * @param null|string $data
-	 *
-	 * @return static
-	 */
-	public static function create($name, $description = null, $groupCode = null, $ruleName = null, $data = null)
-	{
-		$item = new static;
-
-		$item->type = static::ITEM_TYPE;
-		$item->name = $name;
-		$item->description = ( $description === null AND static::ITEM_TYPE != static::TYPE_ROUTE ) ? Inflector::titleize($name) : $description;
-		$item->rule_name = $ruleName;
-		$item->group_code = $groupCode;
-		$item->data = $data;
-
-		$item->save();
-
-		return $item;
-	}
+    /**
+     * Reassigned in child classes to type role, permission or route
+     */
+    const ITEM_TYPE = 0;
 
 
-	/**
-	 * Helper for adding children to role or permission
-	 *
-	 * @param string       $parentName
-	 * @param array|string $childrenNames
-	 * @param bool         $throwException
-	 *
-	 * @throws \Exception
-	 */
-	public static function addChildren($parentName, $childrenNames, $throwException = false)
-	{
-		$parent = (object)['name'=>$parentName];
+    /**
+     * Useful helper for migrations and other stuff
+     * If description is null than it will be transformed like "editUserEmail" => "Edit user email"
+     *
+     * @param string      $name
+     * @param null|string $description
+     * @param null|string $groupCode
+     * @param null|string $ruleName
+     * @param null|string $data
+     *
+     * @return static
+     */
+    public static function create($name, $description = null, $groupCode = null, $ruleName = null, $data = null)
+    {
+        $item = new static;
 
-		$childrenNames = (array) $childrenNames;
+        $item->type = static::ITEM_TYPE;
+        $item->name = $name;
+        $item->description = ($description === null and static::ITEM_TYPE != static::TYPE_ROUTE) ? Inflector::titleize($name) : $description;
+        $item->rule_name = $ruleName;
+        $item->group_code = $groupCode;
+        $item->data = $data;
 
-		$dbManager = Yii::$app->authManager instanceof DbManager ? Yii::$app->authManager : new DbManager();
+        $item->save();
 
-		static::beforeAddChildren($parentName, $childrenNames, $throwException = false);
-		foreach ($childrenNames as $childName)
-		{
-			$child = (object)['name'=>$childName];
+        return $item;
+    }
 
-			try
-			{
-				$dbManager->addChild($parent, $child);
-			}
-			catch (\Exception $e)
-			{
-				if ( $throwException )
-				{
-					throw $e;
-				}
-			}
-		}
 
-		AuthHelper::invalidatePermissions();
-	}
+    /**
+     * Helper for adding children to role or permission
+     *
+     * @param string       $parentName
+     * @param array|string $childrenNames
+     * @param bool         $throwException
+     *
+     * @throws \Exception
+     */
+    public static function addChildren($parentName, $childrenNames, $throwException = false)
+    {
+        $parent = (object)['name'=>$parentName];
 
-	/**
-	 * @param string       $parentName
-	 * @param array|string $childrenNames
-	 */
-	public static function removeChildren($parentName, $childrenNames)
-	{
-		$childrenNames = (array) $childrenNames;
+        $childrenNames = (array) $childrenNames;
 
-		static::beforeRemoveChildren($parentName, $childrenNames);
-		foreach ($childrenNames as $childName)
-		{
-			Yii::$app->db->createCommand()
-				->delete(Yii::$app->getModule('user-management')->auth_item_child_table, ['parent' => $parentName, 'child' => $childName])
-				->execute();
-		}
+        $dbManager = Yii::$app->authManager instanceof DbManager ? Yii::$app->authManager : new DbManager();
 
-		AuthHelper::invalidatePermissions();
-	}
+        static::beforeAddChildren($parentName, $childrenNames, $throwException = false);
+        foreach ($childrenNames as $childName) {
+            $child = (object)['name'=>$childName];
 
-	/**
-	 * @param mixed $condition
-	 *
-	 * @return bool
-	 */
-	public static function deleteIfExists($condition)
-	{
-		$model = static::findOne($condition);
+            try {
+                $dbManager->addChild($parent, $child);
+            } catch (\Exception $e) {
+                if ($throwException) {
+                    throw $e;
+                }
+            }
+        }
 
-		if ( $model )
-		{
-			$model->delete();
+        AuthHelper::invalidatePermissions();
+    }
 
-			return true;
-		}
+    /**
+     * @param string       $parentName
+     * @param array|string $childrenNames
+     */
+    public static function removeChildren($parentName, $childrenNames)
+    {
+        $childrenNames = (array) $childrenNames;
 
-		return false;
-	}
+        static::beforeRemoveChildren($parentName, $childrenNames);
+        foreach ($childrenNames as $childName) {
+            Yii::$app->db->createCommand()
+                ->delete(Yii::$app->getModule('user-management')->auth_item_child_table, ['parent' => $parentName, 'child' => $childName])
+                ->execute();
+        }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function behaviors()
-	{
-		return [
-			TimestampBehavior::className(),
-		];
-	}
+        AuthHelper::invalidatePermissions();
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public static function tableName()
-	{
-		return Yii::$app->getModule('user-management')->auth_item_table;
-	}
+    /**
+     * @param mixed $condition
+     *
+     * @return bool
+     */
+    public static function deleteIfExists($condition)
+    {
+        $model = static::findOne($condition);
 
-	/**
-	 * @inheritdoc
-	 */
-	public function rules()
-	{
-		return [
-			[['name', 'rule_name', 'description', 'group_code'], 'trim'],
+        if ($model) {
+            $model->delete();
 
-			['description', 'required', 'on'=>'webInput'],
-			['description', 'string', 'max' => 255],
+            return true;
+        }
 
-			['name', 'required'],
-			['name', 'validateUniqueName'],
-			[['name', 'rule_name', 'group_code'], 'string', 'max' => 64],
+        return false;
+    }
 
-			[['rule_name', 'description', 'group_code', 'data'], 'default', 'value'=>null],
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
 
-			['type', 'integer'],
-			['type', 'in', 'range'=>[static::TYPE_ROLE, static::TYPE_PERMISSION, static::TYPE_ROUTE]],
-		];
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return Yii::$app->getModule('user-management')->auth_item_table;
+    }
 
-	/**
-	 * Default unique validator search only within specific class (Role, Route or Permission) because of the overwritten find() method
-	 */
-	public function validateUniqueName($attribute)
-	{
-		if ( $this->isNewRecord || ( $this->oldAttributes['name'] && $this->oldAttributes['name'] !== $this->name ) )
-		{
-			if ( Role::find()->where(['name'=>$this->name])->exists() )
-			{
-				$this->addError('name', Yii::t('yii', '{attribute} "{value}" has already been taken.', [
-					'attribute' => $this->getAttributeLabel($attribute),
-					'value'     => $this->$attribute,
-				]));
-			}
-		}
-	}
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['name', 'rule_name', 'description', 'group_code'], 'trim'],
 
-	/**
-	 * @inheritdoc
-	 * @return ActiveQuery the newly created [[ActiveQuery]] instance.
-	 */
-	public static function find()
-	{
-		return parent::find()->andWhere([Yii::$app->getModule('user-management')->auth_item_table . '.type'=>static::ITEM_TYPE]);
-	}
+            ['description', 'required', 'on'=>'webInput'],
+            ['description', 'string', 'max' => 255],
 
-	/**
-	 * @inheritdoc
-	 */
-	public function attributeLabels()
-	{
-		return [
-			'name'        => UserManagementModule::t('back', 'Code'),
-			'description' => UserManagementModule::t('back', 'Description'),
-			'rule_name'   => UserManagementModule::t('back', 'Rule'),
-			'group_code'  => UserManagementModule::t('back', 'Group'),
-			'data'        => UserManagementModule::t('back', 'Data'),
-			'type'        => UserManagementModule::t('back', 'Type'),
-			'created_at'  => UserManagementModule::t('back', 'Created'),
-			'updated_at'  => UserManagementModule::t('back', 'Updated'),
-		];
-	}
+            ['name', 'required'],
+            ['name', 'validateUniqueName'],
+            [['name', 'rule_name', 'group_code'], 'string', 'max' => 64],
 
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getGroup()
-	{
-		return $this->hasOne(AuthItemGroup::className(), ['code' => 'group_code']);
-	}
+            [['rule_name', 'description', 'group_code', 'data'], 'default', 'value'=>null],
 
-	/**
-	 * Ensure type of item
-	 *
-	 * @inheritdoc
-	 */
-	public function beforeSave($insert)
-	{
-		$this->type = static::ITEM_TYPE;
+            ['type', 'integer'],
+            ['type', 'in', 'range'=>[static::TYPE_ROLE, static::TYPE_PERMISSION, static::TYPE_ROUTE]],
+        ];
+    }
 
-		return parent::beforeSave($insert);
-	}
+    /**
+     * Default unique validator search only within specific class (Role, Route or Permission) because of the overwritten find() method
+     */
+    public function validateUniqueName($attribute)
+    {
+        if ($this->isNewRecord || ($this->oldAttributes['name'] && $this->oldAttributes['name'] !== $this->name)) {
+            if (Role::find()->where(['name'=>$this->name])->exists()) {
+                $this->addError('name', Yii::t('yii', '{attribute} "{value}" has already been taken.', [
+                    'attribute' => $this->getAttributeLabel($attribute),
+                    'value'     => $this->$attribute,
+                ]));
+            }
+        }
+    }
 
-	/**
-	 * Invalidate permissions if some item is deleted
-	 */
-	public function afterDelete()
-	{
-		parent::afterDelete();
+    /**
+     * @inheritdoc
+     * @return ActiveQuery the newly created [[ActiveQuery]] instance.
+     */
+    public static function find()
+    {
+        return parent::find()->andWhere([Yii::$app->getModule('user-management')->auth_item_table . '.type'=>static::ITEM_TYPE]);
+    }
 
-		AuthHelper::invalidatePermissions();
-	}
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'name'        => UserManagementModule::t('back', 'Code'),
+            'description' => UserManagementModule::t('back', 'Description'),
+            'rule_name'   => UserManagementModule::t('back', 'Rule'),
+            'group_code'  => UserManagementModule::t('back', 'Group'),
+            'data'        => UserManagementModule::t('back', 'Data'),
+            'type'        => UserManagementModule::t('back', 'Type'),
+            'created_at'  => UserManagementModule::t('back', 'Created'),
+            'updated_at'  => UserManagementModule::t('back', 'Updated'),
+        ];
+    }
 
-	public static function beforeAddChildren($parentName, $childrenNames, $throwException = false)
-	{
-		$event = new AbstractItemEvent(compact('parentName', 'childrenNames', 'throwException'));
-		$event->trigger(get_called_class(), self::EVENT_BEFORE_ADD_CHILDREN, $event);
-	}
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGroup()
+    {
+        return $this->hasOne(AuthItemGroup::className(), ['code' => 'group_code']);
+    }
 
-	public static function beforeRemoveChildren($parentName, $childrenNames)
-	{
-		$event = new AbstractItemEvent(compact('parentName', 'childrenNames', 'throwException'));
-		$event->trigger(get_called_class(), self::EVENT_BEFORE_REMOVE_CHILDREN, $event);
-	}
-} 
+    /**
+     * Ensure type of item
+     *
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+        $this->type = static::ITEM_TYPE;
+
+        return parent::beforeSave($insert);
+    }
+
+    /**
+     * Invalidate permissions if some item is deleted
+     */
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        AuthHelper::invalidatePermissions();
+    }
+
+    public static function beforeAddChildren($parentName, $childrenNames, $throwException = false)
+    {
+        $event = new AbstractItemEvent(compact('parentName', 'childrenNames', 'throwException'));
+        $event->trigger(get_called_class(), self::EVENT_BEFORE_ADD_CHILDREN, $event);
+    }
+
+    public static function beforeRemoveChildren($parentName, $childrenNames)
+    {
+        $event = new AbstractItemEvent(compact('parentName', 'childrenNames', 'throwException'));
+        $event->trigger(get_called_class(), self::EVENT_BEFORE_REMOVE_CHILDREN, $event);
+    }
+}

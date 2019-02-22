@@ -1,12 +1,12 @@
 <?php
 
-use webvimark\modules\UserManagement\UserManagementModule;
+use nitrocinema\modules\UserManagement\UserManagementModule;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /**
  * @var yii\web\View $this
- * @var webvimark\modules\UserManagement\models\UserVisitLog $model
+ * @var nitrocinema\modules\UserManagement\models\UserVisitLog $model
  */
 
 $this->title = $model->id;
@@ -20,21 +20,21 @@ $this->params['breadcrumbs'][] = $this->title;
 		<div class="panel-body">
 
 			<?= DetailView::widget([
-				'model' => $model,
-				'attributes' => [
-					[
-						'attribute'=>'user_id',
-						'value'=>@$model->user->username,
-					],
-					'ip',
-					'language',
-					'os',
-					'browser',
-					'user_agent',
+                'model' => $model,
+                'attributes' => [
+                    [
+                        'attribute'=>'user_id',
+                        'value'=>@$model->user->username,
+                    ],
+                    'ip',
+                    'language',
+                    'os',
+                    'browser',
+                    'user_agent',
 
-					'visit_time:datetime',
-				],
-			]) ?>
+                    'visit_time:datetime',
+                ],
+            ]) ?>
 
 		</div>
 	</div>

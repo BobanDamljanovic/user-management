@@ -1,6 +1,6 @@
 <?php
 use app\assets\AppAsset;
-use webvimark\modules\UserManagement\UserManagementModule;
+use nitrocinema\modules\UserManagement\UserManagementModule;
 use yii\bootstrap\BootstrapAsset;
 use yii\helpers\Html;
 

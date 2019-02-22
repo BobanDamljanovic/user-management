@@ -1,13 +1,14 @@
 <?php
 /**
  * @var $this yii\web\View
- * @var $model webvimark\modules\UserManagement\models\forms\LoginForm
+ * @var $model nitrocinema\modules\UserManagement\models\forms\LoginForm
  */
 
-use webvimark\modules\UserManagement\components\GhostHtml;
-use webvimark\modules\UserManagement\UserManagementModule;
+use nitrocinema\modules\UserManagement\components\GhostHtml;
+use nitrocinema\modules\UserManagement\UserManagementModule;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+
 ?>
 
 <div class="container" id="login-wrapper">
@@ -20,39 +21,39 @@ use yii\helpers\Html;
 				<div class="panel-body">
 
 					<?php $form = ActiveForm::begin([
-						'id'      => 'login-form',
-						'options'=>['autocomplete'=>'off'],
-						'validateOnBlur'=>false,
-						'fieldConfig' => [
-							'template'=>"{input}\n{error}",
-						],
-					]) ?>
+                        'id'      => 'login-form',
+                        'options'=>['autocomplete'=>'off'],
+                        'validateOnBlur'=>false,
+                        'fieldConfig' => [
+                            'template'=>"{input}\n{error}",
+                        ],
+                    ]) ?>
 
 					<?= $form->field($model, 'username')
-						->textInput(['placeholder'=>$model->getAttributeLabel('username'), 'autocomplete'=>'off']) ?>
+                        ->textInput(['placeholder'=>$model->getAttributeLabel('username'), 'autocomplete'=>'off']) ?>
 
 					<?= $form->field($model, 'password')
-						->passwordInput(['placeholder'=>$model->getAttributeLabel('password'), 'autocomplete'=>'off']) ?>
+                        ->passwordInput(['placeholder'=>$model->getAttributeLabel('password'), 'autocomplete'=>'off']) ?>
 
 					<?= (isset(Yii::$app->user->enableAutoLogin) && Yii::$app->user->enableAutoLogin) ? $form->field($model, 'rememberMe')->checkbox(['value'=>true]) : '' ?>
 
 					<?= Html::submitButton(
-						UserManagementModule::t('front', 'Login'),
-						['class' => 'btn btn-lg btn-primary btn-block']
-					) ?>
+                        UserManagementModule::t('front', 'Login'),
+                        ['class' => 'btn btn-lg btn-primary btn-block']
+                    ) ?>
 
 					<div class="row registration-block">
 						<div class="col-sm-6">
 							<?= GhostHtml::a(
-								UserManagementModule::t('front', "Registration"),
-								['/user-management/auth/registration']
-							) ?>
+                                UserManagementModule::t('front', "Registration"),
+                                ['/user-management/auth/registration']
+                            ) ?>
 						</div>
 						<div class="col-sm-6 text-right">
 							<?= GhostHtml::a(
-								UserManagementModule::t('front', "Forgot password ?"),
-								['/user-management/auth/password-recovery']
-							) ?>
+                                UserManagementModule::t('front', "Forgot password ?"),
+                                ['/user-management/auth/password-recovery']
+                            ) ?>
 						</div>
 					</div>
 

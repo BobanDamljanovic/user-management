@@ -1,8 +1,8 @@
 <?php
 
-namespace webvimark\modules\UserManagement\models\rbacDB;
+namespace nitrocinema\modules\UserManagement\models\rbacDB;
 
-use webvimark\modules\UserManagement\UserManagementModule;
+use nitrocinema\modules\UserManagement\UserManagementModule;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -16,48 +16,48 @@ use yii\behaviors\TimestampBehavior;
  */
 class AuthItemGroup extends \yii\db\ActiveRecord
 {
-	/**
-	* @inheritdoc
-	*/
-	public static function tableName()
-	{
-		return Yii::$app->getModule('user-management')->auth_item_group_table;
-	}
+    /**
+    * @inheritdoc
+    */
+    public static function tableName()
+    {
+        return Yii::$app->getModule('user-management')->auth_item_group_table;
+    }
 
-	/**
-	* @inheritdoc
-	*/
-	public function behaviors()
-	{
-		return [
-			TimestampBehavior::className(),
-		];
-	}
+    /**
+    * @inheritdoc
+    */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
 
-	/**
-	* @inheritdoc
-	*/
-	public function rules()
-	{
-		return [
-			[['code', 'name'], 'required'],
-			['code', 'unique'],
-			[['code'], 'string', 'max' => 64],
-			[['code', 'name'], 'trim'],
-			[['name'], 'string', 'max' => 255],
-		];
-	}
+    /**
+    * @inheritdoc
+    */
+    public function rules()
+    {
+        return [
+            [['code', 'name'], 'required'],
+            ['code', 'unique'],
+            [['code'], 'string', 'max' => 64],
+            [['code', 'name'], 'trim'],
+            [['name'], 'string', 'max' => 255],
+        ];
+    }
 
-	/**
-	* @inheritdoc
-	*/
-	public function attributeLabels()
-	{
-		return [
-			'name'        => UserManagementModule::t('back', 'Name'),
-			'code'        => UserManagementModule::t('back', 'Code'),
-			'created_at'  => UserManagementModule::t('back', 'Created'),
-			'updated_at'  => UserManagementModule::t('back', 'Updated'),
-		];
-	}
+    /**
+    * @inheritdoc
+    */
+    public function attributeLabels()
+    {
+        return [
+            'name'        => UserManagementModule::t('back', 'Name'),
+            'code'        => UserManagementModule::t('back', 'Code'),
+            'created_at'  => UserManagementModule::t('back', 'Created'),
+            'updated_at'  => UserManagementModule::t('back', 'Updated'),
+        ];
+    }
 }
